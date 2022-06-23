@@ -15,14 +15,14 @@ jobs:
   DML_DDL_Test:
     runs-on: ubuntu-latest
     env:
-      UID: ${{ github.run_id }}-${{ github.run_attempt }}
+      TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}
       GIT_URL: ${{ github.repositoryUrl }}
       COMMIT_ID: ${{ github.sha }}
       CODE_REF: ${{ github.ref }}
     steps:
       - name: Print ENV
         run: |
-          echo "uid: ${UID}"
+          echo "test_uid: ${TEST_UID}"
           echo "git_url: ${GIT_URL}"
           echo "commit_id: ${COMMIT_ID}"
           echo "code_ref: ${CODE_REF}"
@@ -35,12 +35,12 @@ jobs:
           #password: ${{ secrets.ECS_PASSWORD }}
           key: ${{ secrets.ECS_KEY }}
           port: ${{ secrets.ECS_PORT }}
-          envs: UID,GIT_URL,COMMIT_ID,CODE_REF
+          envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 60m
           script: |
-            echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.log
+            echo "-u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.log
             cd workspace/github
-            ./k8s_deploy.sh -u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+            ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
       - name: Test DML_DDL Test
         uses: appleboy/ssh-action@master
         with:
@@ -49,9 +49,9 @@ jobs:
           #password: ${{ secrets.ECS_PASSWORD }}
           key: ${{ secrets.ECS_KEY }}
           port: ${{ secrets.ECS_PORT }}
-          envs: UID,GIT_URL,COMMIT_ID,CODE_REF
+          envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 200m
           script: |
-            echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.txt
+            echo "-u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.txt
 
 
