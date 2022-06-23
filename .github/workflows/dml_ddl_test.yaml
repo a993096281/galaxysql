@@ -1,0 +1,54 @@
+name: DML_DDL_Test
+on:
+  push:
+    branches:
+      - "main"
+    #paths-ignore:
+    #  - "README.md"
+  pull_request:
+    branches:
+      - "main"
+    #paths-ignore:
+    #  - "README.md"
+
+jobs:
+  DML_DDL_Test:
+    runs-on: ubuntu-latest
+    env:
+      UID: ${{ github.run_id }}-${{ github.run_attempt }}
+      GIT_URL: ${{ github.repositoryUrl }}
+      COMMIT_ID: ${{ github.sha }}
+      CODE_REF: ${{ github.ref }}
+    steps:
+      - name: Print ENV
+        run: |
+          echo "uid: ${UID}"
+          echo "git_url: ${GIT_URL}"
+          echo "commit_id: ${COMMIT_ID}"
+          echo "code_ref: ${CODE_REF}"
+      - uses: actions/checkout@v2
+      - name: Deploy PolarDB-X Cluster
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          #password: ${{ secrets.ECS_PASSWORD }}
+          key: ${{ secrets.ECS_KEY }}
+          port: ${{ secrets.ECS_PORT }}
+          command_timeout: 60m
+          script: |
+            echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.log
+            ./root/workspace/github/k8s_deploy.sh -u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+      - name: Test DML_DDL Test
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          #password: ${{ secrets.ECS_PASSWORD }}
+          key: ${{ secrets.ECS_KEY }}
+          port: ${{ secrets.ECS_PORT }}
+          command_timeout: 60m
+          script: |
+            echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.txt
+
+
