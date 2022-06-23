@@ -35,11 +35,12 @@ jobs:
           #password: ${{ secrets.ECS_PASSWORD }}
           key: ${{ secrets.ECS_KEY }}
           port: ${{ secrets.ECS_PORT }}
-          env: UID,GIT_URL,COMMIT_ID,CODE_REF
+          envs: UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 60m
           script: |
             echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.log
-            ./workspace/github/k8s_deploy.sh -u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+            cd workspace/github
+            ./k8s_deploy.sh -u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
       - name: Test DML_DDL Test
         uses: appleboy/ssh-action@master
         with:
@@ -48,7 +49,7 @@ jobs:
           #password: ${{ secrets.ECS_PASSWORD }}
           key: ${{ secrets.ECS_KEY }}
           port: ${{ secrets.ECS_PORT }}
-          env: UID,GIT_URL,COMMIT_ID,CODE_REF
+          envs: UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 200m
           script: |
             echo "-u ${UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.txt
