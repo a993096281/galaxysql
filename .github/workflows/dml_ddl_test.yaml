@@ -32,8 +32,7 @@ jobs:
         with:
           host: ${{ secrets.ECS_HOST }}
           username: ${{ secrets.ECS_USERNAME }}
-          #password: ${{ secrets.ECS_PASSWORD }}
-          key: ${{ secrets.ECS_KEY }}
+          password: ${{ secrets.ECS_PASSWORD }}
           port: ${{ secrets.ECS_PORT }}
           command_timeout: 60m
           script: |
@@ -44,8 +43,7 @@ jobs:
         with:
           host: ${{ secrets.ECS_HOST }}
           username: ${{ secrets.ECS_USERNAME }}
-          #password: ${{ secrets.ECS_PASSWORD }}
-          key: ${{ secrets.ECS_KEY }}
+          password: ${{ secrets.ECS_PASSWORD }}
           port: ${{ secrets.ECS_PORT }}
           command_timeout: 60m
           script: |
