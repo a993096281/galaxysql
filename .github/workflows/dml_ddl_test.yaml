@@ -27,6 +27,8 @@ jobs:
           echo "commit_id: ${COMMIT_ID}"
           echo "code_ref: ${CODE_REF}"
       - uses: actions/checkout@v2
+        with: 
+          submodules: true
       - name: Deploy PolarDB-X Cluster
         uses: appleboy/ssh-action@master
         with:
