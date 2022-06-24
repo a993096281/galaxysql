@@ -16,6 +16,11 @@ public class ErrorExampleTest {
 
     @Test
     public void testErr() {
+        System.out.println("This is a error test case.");
+        errFunction();
+    }
+
+    public void errFunction() {
         Assert.assertTrue(4 < 2);
     }
     
