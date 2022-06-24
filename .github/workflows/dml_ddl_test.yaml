@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
+      contents: write
       checks: write
     env:
       TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}
