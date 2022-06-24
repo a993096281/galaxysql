@@ -14,6 +14,10 @@ on:
 jobs:
   DML_DDL_Test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
     env:
       TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}
       GIT_URL: https://github.com/${{ github.repository }}
