@@ -21,3 +21,4 @@ polardbx-server/src/main/resources/*.properties
 polardbx-server/src/main/resources/logback.xml
 target/
 push.sh
+add_commit.sh
