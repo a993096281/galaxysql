@@ -39,7 +39,7 @@ jobs:
           command_timeout: 60m
           script: |
             cd workspace/github
-           # ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+            ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
       - name: Test DML_DDL Test
         uses: appleboy/ssh-action@master
         with:
