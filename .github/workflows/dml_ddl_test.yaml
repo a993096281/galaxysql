@@ -38,9 +38,8 @@ jobs:
           envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 60m
           script: |
-            echo "-u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.log
             cd workspace/github
-            ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+           # ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
       - name: Test DML_DDL Test
         uses: appleboy/ssh-action@master
         with:
@@ -52,6 +51,28 @@ jobs:
           envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 200m
           script: |
-            echo "-u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}" > /tmp/${UID}.txt
+            cd workspace/github
+            ./create_test_runner.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+      - name: Get Test Report Files
+        id: GetFiles
+        uses: nicklasfrahm/scp-action@main
+        with: 
+          direction: download
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          key: ${{ secrets.ECS_KEY }}
+          source: /root/workspace/reports/${TEST_UID}/surefire-reports.tar.gz
+          target: .
+      - name: Decompress Test Result Files
+        run: |
+          tar -zxf surefire-reports.tar.gz 
+      - name: Analyze Test Result
+        uses: dorny/test-reporter@v1
+        with:
+          name: DML_DDL Test Result
+          path: surefire-reports/TEST-*.xml
+          reporter: java-junit
+          max-annotations: '50'
+    
 
 
