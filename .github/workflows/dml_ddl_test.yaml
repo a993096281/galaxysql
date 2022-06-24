@@ -52,7 +52,7 @@ jobs:
           command_timeout: 200m
           script: |
             cd workspace/github
-            ./create_test_runner.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
+            ./create_test_runner.sh -u ${TEST_UID}
       - name: Get Test Report Files
         id: GetFiles
         uses: nicklasfrahm/scp-action@main
