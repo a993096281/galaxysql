@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}
-      GIT_URL: ${{ github.repositoryUrl }}
+      GIT_URL: https://github.com/${{ github.repositoryUrl }}
       COMMIT_ID: ${{ github.sha }}
       CODE_REF: ${{ github.ref }}
     steps:
