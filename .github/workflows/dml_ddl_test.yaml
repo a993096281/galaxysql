@@ -57,7 +57,7 @@ jobs:
             ./create_test_runner.sh -u ${TEST_UID}
       - name: Get Test Report Files
         run: |
-          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/${TEST_UID}/surefire-reports.tar.gz .
+          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/surefire-reports.tar.gz .
           tar -zxf surefire-reports.tar.gz
       - name: Analyze Test Result
         uses: dorny/test-reporter@v1
@@ -66,6 +66,3 @@ jobs:
           path: surefire-reports/TEST-*.xml
           reporter: java-junit
           max-annotations: '50'
-    
-
-
