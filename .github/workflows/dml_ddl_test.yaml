@@ -5,7 +5,8 @@ on:
       - "main"
     #paths-ignore:
     #  - "README.md"
-  pull_request:
+  pull_request_target:
+    types: [labeled]
     branches:
       - "main"
     #paths-ignore:
@@ -14,6 +15,7 @@ on:
 jobs:
   DML_DDL_Test:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'safe to test')
     permissions:
       id-token: write
       contents: read
