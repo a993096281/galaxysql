@@ -23,6 +23,7 @@ jobs:
       GIT_URL: https://github.com/${{ github.repository }}
       COMMIT_ID: ${{ github.sha }}
       CODE_REF: ${{ github.ref }}
+      P_USERNAME: ${{ secrets.ECS_USERNAME }}
     steps:
       - name: Print ENV
         run: |
@@ -37,10 +38,10 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.ECS_HOST }}
-          username: ${{ secrets.ECS_USERNAME }}
+          username: $P_USERNAME
           #password: ${{ secrets.ECS_PASSWORD }}
           key: ${{ secrets.ECS_KEY }}
-          port: ${{ secrets.ECS_PORT }}
+          port: 22
           envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
           command_timeout: 60m
           script: |
