@@ -32,8 +32,12 @@ jobs:
           echo "commit_id: ${COMMIT_ID}"
           echo "code_ref: ${CODE_REF}"
       - uses: actions/checkout@v3
-        with: 
-          submodules: true
+      - name: Get Name
+        run: |
+          sshpass -p ${{ secrets.ECS_PASSWORD }} ssh -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }} "pwd && echo "hello world!""
+      - name: Test -i
+        run: |
+          ssh -i ${{ secrets.ECS_KEY }} -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }} "pwd && echo "Say: hello world!""
       - name: Deploy PolarDB-X Cluster
         uses: appleboy/ssh-action@master
         with:
