@@ -44,9 +44,7 @@ jobs:
           mvn -B install -DskipTests=true -Dautoconfig.skip
           mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
       - name: Analyze Test Result
-        uses: dorny/test-reporter@v1
+        uses: mikepenz/action-junit-report@v3
         with:
-          name: Unit Test Result
-          path: polardbx-*/target/surefire-reports/TEST-*.xml
-          reporter: java-junit
-          max-annotations: '50'
+          check_name: Unit Test Result
+          report_paths: polardbx-*/target/surefire-reports/TEST-*.xml
