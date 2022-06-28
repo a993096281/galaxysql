@@ -11,6 +11,9 @@ on:
     #paths-ignore:
     #  - "README.md"
 
+env:
+  MAVEN_CUSTOM_OPTS: "-Xmx4g -XX:+ExitOnOutOfMemoryError"
+
 jobs:
   Unit_Test:
     runs-on: ubuntu-latest
@@ -37,6 +40,7 @@ jobs:
             ${{ runner.os }}-maven-2-
       - name: Unit Test
         run: |
+          export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
           mvn -B install -DskipTests=true -Dautoconfig.skip
           mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
       - name: Analyze Test Result
