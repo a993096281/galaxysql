@@ -124,3 +124,4 @@ You can join these groups and chats to discuss and ask PolarDB-X related questio
 
 ## Acknowledgements
 ApsaraDB GalaxySQL references from many open source projects, such as Calcite, Presto etc. Sincere thanks to these projects and contributors.
+
