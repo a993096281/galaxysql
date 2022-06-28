@@ -1,0 +1,40 @@
+name: Unit_Test
+on:
+  push:
+    branches:
+      - "main"
+    #paths-ignore:
+    #  - "README.md"
+  pull_request:
+    branches:
+      - "main"
+    #paths-ignore:
+    #  - "README.md"
+
+jobs:
+  Unit_Test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - uses: stCarolas/setup-maven@v4.3
+        with:
+          maven-version: 3.5.0
+      - name: Unit Test
+        run: |
+          mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
+      - name: Analyze Test Result
+        uses: dorny/test-reporter@v1
+        with:
+          name: Unit Test Result
+          path: polardbx-*/target/surefire-reports/TEST-*.xml
+          reporter: java-junit
+          max-annotations: '50'
