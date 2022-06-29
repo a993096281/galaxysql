@@ -38,6 +38,8 @@ jobs:
           key: ${{ runner.os }}-maven-2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-2-
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Unit Test
         run: |
           export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
