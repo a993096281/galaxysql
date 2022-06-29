@@ -38,12 +38,10 @@ jobs:
           key: ${{ runner.os }}-maven-2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-2-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Unit Test
         run: |
           export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
-          sudo echo "Asia/Shanghai" > /etc/timezone
+          sudo sed -i 's#.*#Asia/Shanghai#g' /etc/timezone
           mvn -B install -DskipTests=true -Dautoconfig.skip
           mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
       - name: Analyze Test Result
