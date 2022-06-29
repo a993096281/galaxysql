@@ -43,6 +43,8 @@ jobs:
           export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
           mvn -B install -DskipTests=true -Dautoconfig.skip
           mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Analyze Test Result
         uses: scacap/action-surefire-report@v1
         with:
