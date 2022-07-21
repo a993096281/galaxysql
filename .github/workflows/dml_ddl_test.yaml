@@ -46,7 +46,20 @@ jobs:
           script: |
             cd workspace/github
             ./k8s_deploy.sh -u ${TEST_UID} --repository ${GIT_URL} --ref ${CODE_REF} --commit ${COMMIT_ID}
-      - name: Test DML_DDL Test
+      - name: Load Init Data
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          #password: ${{ secrets.ECS_PASSWORD }}
+          key: ${{ secrets.ECS_KEY }}
+          port: ${{ secrets.ECS_PORT }}
+          envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
+          command_timeout: 100m
+          script: |
+            cd workspace/github
+            ./load_data_by_pod.sh -u ${TEST_UID} --parallel
+      - name: Test DML Case
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.ECS_HOST }}
@@ -58,15 +71,16 @@ jobs:
           command_timeout: 200m
           script: |
             cd workspace/github
-            ./create_test_runner.sh -u ${TEST_UID}
+            ./create_test_runner.sh -u ${TEST_UID} -i 1 -t dml
       - name: Get Test Report Files
         run: |
-          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/surefire-reports.tar.gz .
-          tar -zxf surefire-reports.tar.gz
+          mkdir dml
+          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/1/surefire-reports.tar.gz dml
+          tar -zxf dml/surefire-reports.tar.gz
       - name: Analyze Test Result
-        uses: dorny/test-reporter@v1
+        uses: scacap/action-surefire-report@v1
         with:
-          name: DML_DDL Test Result
-          path: surefire-reports/TEST-*.xml
-          reporter: java-junit
-          max-annotations: '50'
+          check_name: DML Test Result
+          report_paths: dml/surefire-reports/TEST-*.xml
+          fail_on_test_failures: true
+        
