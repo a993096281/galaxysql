@@ -42,8 +42,8 @@ jobs:
         run: |
           export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
           sudo sed -i 's#.*#Asia/Shanghai#g' /etc/timezone
-          mvn -B install -DskipTests=true -Dautoconfig.skip
-          mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc' -Dmaven.test.failure.ignore=true
+          mvn -B -pl '!polardbx-test' install -DskipTests=true -Dautoconfig.skip
+          mvn test -B -pl '!polardbx-calcite,!polardbx-rule,!polardbx-rpc,!polardbx-test' -Dmaven.test.failure.ignore=true
       - name: Analyze Test Result
         uses: scacap/action-surefire-report@v1
         with:
