@@ -15,7 +15,7 @@
     <artifactId>polardbx-test</artifactId>
 
     <properties>
-        <mysql_connector_v5>5.1.40.12</mysql_connector_v5>
+        <mysql_connector_v5>5.1.40</mysql_connector_v5>
         <mysql_connector_v8>8.0.26</mysql_connector_v8>
         <mvn_parallel>none</mvn_parallel>
         <mvn_threadCount>24</mvn_threadCount>
