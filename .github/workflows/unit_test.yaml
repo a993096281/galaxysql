@@ -36,6 +36,9 @@ jobs:
       - uses: stCarolas/setup-maven@v4.3
         with:
           maven-version: 3.5.0
+      - uses: s4u/maven-settings-action@v2.6.0
+        with:
+        mirrors: '[{"id": "aliyunmaven", "name": "aliyun maven", "mirrorOf": "central", "url": "https://maven.aliyun.com/repository/public"}]'
       # - name: Cache local Maven repository
       #   uses: actions/cache@v2
       #   with:
