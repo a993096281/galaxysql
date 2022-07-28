@@ -12,6 +12,11 @@ on:
     #paths-ignore:
     #  - "README.md"
 
+concurrency: 
+  # main branch should complete running
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   DML_DDL_Test:
     runs-on: ubuntu-latest

@@ -14,6 +14,11 @@ on:
 env:
   MAVEN_CUSTOM_OPTS: "-Xmx4g -XX:+ExitOnOutOfMemoryError"
 
+concurrency: 
+  # main branch should complete running
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   Unit_Test:
     runs-on: ubuntu-latest
