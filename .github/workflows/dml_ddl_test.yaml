@@ -79,9 +79,10 @@ jobs:
             ./create_test_runner.sh -u ${TEST_UID} -i 1 -t dml --maven="mvn test -Dmaven.test.failure.ignore=true -Ddeploy.skip=true -Djdk=1.8"
       - name: Get Test Report Files
         run: |
-          mkdir dml
-          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/1/surefire-reports.tar.gz dml
-          tar -zxf dml/surefire-reports.tar.gz
+          mkdir -p dml
+          sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/1/surefire-reports.tar.gz dml/surefire-reports.tar.gz
+          ls -R dml
+          tar -zxvf dml/surefire-reports.tar.gz
       - name: Analyze DML Test Result
         uses: scacap/action-surefire-report@v1
         with:
