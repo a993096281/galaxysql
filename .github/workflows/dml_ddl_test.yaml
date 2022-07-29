@@ -40,6 +40,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Deploy PolarDB-X Cluster
         uses: appleboy/ssh-action@master
+        id: deploy
         with:
           host: ${{ secrets.ECS_HOST }}
           username: ${{ secrets.ECS_USERNAME }}
@@ -60,7 +61,7 @@ jobs:
           key: ${{ secrets.ECS_KEY }}
           port: ${{ secrets.ECS_PORT }}
           envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
-          command_timeout: 100m
+          command_timeout: 60m
           script: |
             cd workspace/github
             ./load_data_by_pod.sh -u ${TEST_UID} --parallel
@@ -84,11 +85,24 @@ jobs:
           ls -R dml
           echo "tar file:"
           tar -zxvf dml/surefire-reports.tar.gz -C dml
-
       - name: Analyze DML Test Result
         uses: scacap/action-surefire-report@v1
         with:
           check_name: DML Test Result
           report_paths: dml/surefire-reports/TEST-*.xml
           fail_on_test_failures: true
+      - name: Clean up PolarDB-X Cluster
+        if: ${{ always() && steps.deploy.outcome == 'success' }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          #password: ${{ secrets.ECS_PASSWORD }}
+          key: ${{ secrets.ECS_KEY }}
+          port: ${{ secrets.ECS_PORT }}
+          envs: TEST_UID,GIT_URL,COMMIT_ID,CODE_REF
+          command_timeout: 200m
+          script: |
+            cd workspace/github
+            ./cleanup.sh -u ${TEST_UID}
         
