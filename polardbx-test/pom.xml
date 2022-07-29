@@ -112,12 +112,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>-Xms2g -Xmx2g -Xmn2g -Xss2048k -XX:SurvivorRatio=10</argLine>
-                    <properties>
+                    <!-- <properties>
                         <property>
                             <name>listener</name>
                             <value>com.alibaba.polardbx.qatest.JunitListener</value>
                         </property>
-                    </properties>
+                    </properties> -->
                     <parallel>${mvn_parallel}</parallel>
                     <!--                    <runOrder>random</runOrder>-->
                     <threadCount>${mvn_threadCount}</threadCount>
