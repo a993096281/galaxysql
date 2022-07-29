@@ -78,7 +78,8 @@ jobs:
           script: |
             cd workspace/github
             ./create_test_runner.sh -u ${TEST_UID} -i 1 -t dml --maven="mvn test -Dmaven.test.failure.ignore=true -Ddeploy.skip=true -Djdk=1.8"
-      - name: Get Test Report Files
+      - name: Get DML Test Report Files
+        id: dml_reports
         run: |
           mkdir -p dml
           sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/1/surefire-reports.tar.gz dml/surefire-reports.tar.gz
@@ -86,6 +87,7 @@ jobs:
           echo "tar file:"
           tar -zxvf dml/surefire-reports.tar.gz -C dml
       - name: Analyze DML Test Result
+        if: ${{ always() && steps.dml_reports.outcome == 'success' }}
         uses: scacap/action-surefire-report@v1
         with:
           check_name: DML Test Result
