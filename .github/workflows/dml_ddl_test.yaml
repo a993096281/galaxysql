@@ -82,7 +82,10 @@ jobs:
           mkdir -p dml
           sshpass -p ${{ secrets.ECS_PASSWORD }} scp -r -o StrictHostKeyChecking=no -P ${{ secrets.ECS_PORT }} ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }}:/root/workspace/reports/${TEST_UID}/1/surefire-reports.tar.gz dml/surefire-reports.tar.gz
           ls -R dml
-          tar -zxvf dml/surefire-reports.tar.gz
+          echo "tar file:"
+          tar -zxvf dml/surefire-reports.tar.gz dml/surefire-reports
+          echo "tar finish!"
+          ls -R dml
       - name: Analyze DML Test Result
         uses: scacap/action-surefire-report@v1
         with:
