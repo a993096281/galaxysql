@@ -41,9 +41,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-2-${{ hashFiles('**/pom.xml') }}
+          key: ${{ github.workflow }}-${{ runner.os }}-maven-2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-2-
+            ${{ github.workflow }}-${{ runner.os }}-maven-2-
       - name: Unit Test
         run: |
           export MAVEN_OPTS="${MAVEN_CUSTOM_OPTS}"
