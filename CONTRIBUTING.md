@@ -52,6 +52,8 @@ git push --recurse-submodules=on-demand origin your_github_id_feature_name
 ### Create a PR
 Click **New pull request** or **Compare & pull  request** button, choose to compare branches apsaradb/galaxysql and your_github/your_github_id_feature_name, and write PR description.
 
+Make sure corresponding test cases are added, and no existing test cases are broken ([detail](./docs/en/pull-request.md)).
+
 ### Address Reviewers' Comments
 Resolve all problems raised by reviewers and update PR.
 
