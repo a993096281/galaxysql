@@ -42,5 +42,5 @@ jobs:
           echo "commit_id: ${COMMIT_ID}"
           echo "code_ref: ${CODE_REF}"
           echo "pull: ${{ github.event_name }}"
-          echo "pull2: ${{ toJSON(github.event.pull_request) }}"
           echo "pull3: ${{ toJSON(github) }}"
+          echo "pull2: ${{ toJSON(github.event.pull_request) }}"
