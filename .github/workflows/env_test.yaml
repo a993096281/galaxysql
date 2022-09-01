@@ -28,7 +28,7 @@ permissions:
 jobs:
   env_Test:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ready for test')
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'help wanted')
     env:
       TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}-dml
       GIT_URL: https://github.com/${{ github.repository }}
