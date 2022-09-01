@@ -1,0 +1,45 @@
+name: ENV_Test
+on:
+  push:
+    branches:
+      - "main"
+    paths-ignore:
+      - "README.md"
+      - "docs/**"
+  pull_request_target:
+    types: [labeled]
+    branches:
+      - "main"
+    paths-ignore:
+      - "README.md"
+      - "docs/**"
+
+concurrency: 
+  # main branch should complete running
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+  contents: read
+  issues: read
+  pull-requests: write
+
+jobs:
+  DML_Test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'ready for test')
+    env:
+      TEST_UID: ${{ github.run_id }}-${{ github.run_attempt }}-dml
+      GIT_URL: https://github.com/${{ github.repository }}
+      COMMIT_ID: ${{ github.sha }}
+      CODE_REF: ${{ github.ref }}
+    steps:
+      - name: Print ENV
+        run: |
+          echo "test_uid: ${TEST_UID}"
+          echo "git_url: ${GIT_URL}"
+          echo "commit_id: ${COMMIT_ID}"
+          echo "code_ref: ${CODE_REF}"
+          echo "pull: ${{ github.event_name }}"
+          echo "pull2: ${{ github.event.pull_request }}"
