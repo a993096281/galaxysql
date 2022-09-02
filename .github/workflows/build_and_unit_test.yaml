@@ -31,6 +31,9 @@ jobs:
   Build_Unit_Test:
     runs-on: ubuntu-latest
     steps:
+      - name: Print ENV
+        run: |
+          echo 'pull3: ${{ toJSON(github) }}'
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
